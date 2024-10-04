@@ -69,22 +69,91 @@ def comentario_mas_largo(registros: list, anyo: int, palabra: str):
 
 def indexa_formas_por_mes(registros):
 
-    meses = {"Enero": set(), "Febrero": set(), "Marzo": set(), "Abril": set(), "Mayo": set(), 
-             "Junio": set(), "Julio": set(), "Agosto": set(), "Septiembre": set(), "Octubre": set(),
-             "Noviembre": set(), "Diciembre": set()}
     
-    meses_indice= ["Enero", "Febrero", "Marzo", 
-                   "Abril", "Mayo", "Junio", "Julio",
-                   "Agosto", "Septiembre", "Octubre", "Noviembre",
-                   "Diciembre"]
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo"
+             , "Junio", "Julio", "Agosto", "Septiembre", 
+             "Octubre", "Noviembre", "Diciembre"]
     
-    
+    formas_por_mes = {mes: set() for mes in meses}
+
     for registro in registros:
 
-        if meses.items()[0].__eq__(meses_indice[registro.fechahora.month - 1]):
-
-            meses[meses_indice[registro.fechahora.month - 1]].add(registro.forma)
-
+        mes = meses[registro.fechahora.month -1]
+        formas_por_mes[mes].add(registro.forma)
 
 
-    return meses
+    return formas_por_mes
+
+
+
+def avistamientos_fechas(registros, fecha_inicial, fecha_final):
+
+    reg = []
+
+    if fecha_final == None and fecha_inicial == None:
+        return registros
+    
+    elif (fecha_final == None):
+
+        for registro in registros:
+
+            if registro.fechahora.date() >= fecha_inicial.date():
+                reg.append(registro)
+
+    else:
+
+        for registro in registros:
+
+            if registro.fechahora.date() >= fecha_inicial.date() and registro.fechahora.date() <= fecha_final.date():
+
+                reg.append(registro)
+
+    
+    return reg
+
+
+def hora_mas_avistamientos(registros):
+
+    horas = []
+
+    mayor_tamano = 0
+
+    for hora in range(24):
+       
+        horas.append(hora)
+
+    avistamientos_hora = {hora: set() for hora in horas}
+
+    for registro in registros:
+       
+        hora = horas[registro.fechahora.hour]
+        avistamientos_hora[hora].add(registro)
+
+    
+    for hora in horas:
+
+        if avistamientos_hora[hora].__len__() > mayor_tamano:
+            mayor_tamano = avistamientos_hora[hora].__len__()
+    
+    for hora in horas:
+
+        if avistamientos_hora[hora].__len__() == mayor_tamano:
+
+            for avistamiento in avistamientos_hora[hora]:
+
+                return avistamiento.fechahora.hour
+            
+
+def dicc_estado_longitud_media_comentario(registros):
+
+    estados = set()
+
+    for registro in registros:
+
+        estados.add(registro.estado)
+
+
+    estados_registros = {estado: set() for estado in estados}
+    
+    
+    
