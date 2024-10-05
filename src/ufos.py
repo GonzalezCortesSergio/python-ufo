@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 from math import sqrt
 from collections import namedtuple
+from statistics import mean
 
 Avistaminento = namedtuple("Avistamiento", 
                            "fechahora, ciudad, estado, forma, duracion, comentarios, latitud, longitud")
@@ -153,7 +154,23 @@ def dicc_estado_longitud_media_comentario(registros):
         estados.add(registro.estado)
 
 
-    estados_registros = {estado: set() for estado in estados}
+    estados_registros = {estado: list() for estado in estados}
+
+    estados_media = dict()
+
+    for registro in registros:
+
+        estados_registros[registro.estado].append(registro.comentarios.__len__())
+
+
+    for estado in estados_registros:
+
+        estados_media.update({estado : mean(estados_registros[estado])})
+
+
+    return estados_media
+
+
     
     
     

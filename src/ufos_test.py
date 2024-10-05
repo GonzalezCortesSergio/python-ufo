@@ -55,3 +55,7 @@ print("")
 # Test de la función dicc_estado_longitud_media_comentario
 
 print(dicc_estado_longitud_media_comentario(avistamientos))
+
+print("")
+print("")
+
